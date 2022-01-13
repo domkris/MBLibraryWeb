@@ -22,7 +22,5 @@ namespace MBLibraryWeb.DB.Models
         public List<Email> Emails { get; set; }
         public List<PhoneNumber> PhoneNumbers { get; set; }
 
-
-
     }
 }
