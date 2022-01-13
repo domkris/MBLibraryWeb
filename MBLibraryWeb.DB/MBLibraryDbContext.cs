@@ -1,4 +1,4 @@
-﻿using MBLibraryWeb.DB.Models;
+﻿using MBLibraryWeb.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace MBLibraryWeb.DB

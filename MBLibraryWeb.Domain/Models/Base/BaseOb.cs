@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace MBLibraryWeb.DB.Models.Base
+namespace MBLibraryWeb.Domain.Models.Base
 {
     public class BaseOb
     {

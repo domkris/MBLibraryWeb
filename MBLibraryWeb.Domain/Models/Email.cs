@@ -1,7 +1,7 @@
-﻿using MBLibraryWeb.DB.Models.Base;
+﻿using MBLibraryWeb.Domain.Models.Base;
 using System.ComponentModel.DataAnnotations;
 
-namespace MBLibraryWeb.DB.Models
+namespace MBLibraryWeb.Domain.Models
 {
     public class Email: BaseOb
     {

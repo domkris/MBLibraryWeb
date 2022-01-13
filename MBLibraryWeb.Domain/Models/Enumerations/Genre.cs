@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MBLibraryWeb.DB.Models.Enumerations
+namespace MBLibraryWeb.Domain.Models.Enumerations
 {
     public enum Genre
     {
