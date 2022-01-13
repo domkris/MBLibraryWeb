@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBLibraryWeb", "MBLibraryWeb\MBLibraryWeb.csproj", "{84C1E620-3765-4368-8B54-DBE9B6BD2E83}"
+	ProjectSection(ProjectDependencies) = postProject
+		{03523046-9FC3-4224-B74E-09860CC1A89A} = {03523046-9FC3-4224-B74E-09860CC1A89A}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBLibraryWeb.DB", "MBLibraryWeb.DB\MBLibraryWeb.DB.csproj", "{03523046-9FC3-4224-B74E-09860CC1A89A}"
 EndProject
