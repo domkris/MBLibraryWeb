@@ -13,6 +13,8 @@ namespace MBLibraryWeb.DB
         public DbSet<Email> Emails { get; set; }
         public DbSet<PhoneNumber> PhoneNumbers { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<UserBookBorrowHistory> UsersBooksBorrowHistory { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) 
         {

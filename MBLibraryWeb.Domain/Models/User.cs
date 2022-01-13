@@ -21,6 +21,6 @@ namespace MBLibraryWeb.Domain.Models
         public List<Address> Addresses { get; set; }
         public List<Email> Emails { get; set; }
         public List<PhoneNumber> PhoneNumbers { get; set; }
-
+        public List<UserBookBorrowHistory> UserBookBorrowHistoryList { get; set; }
     }
 }
