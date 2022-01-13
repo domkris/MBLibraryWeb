@@ -35,6 +35,11 @@ namespace MBLibraryWeb.DB.Repositories
             return context.Set<T>().ToList();
         }
 
+        public IEnumerable<T> GetAllSimpleList(Expression<Func<T, T>> expression)
+        {
+            return context.Set<T>().Select(expression).ToList();
+        }
+
         public T GetById(int id)
         {
             return context.Set<T>().Find(id);

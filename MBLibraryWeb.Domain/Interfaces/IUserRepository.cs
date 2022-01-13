@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace MBLibraryWeb.Domain.Interfaces
 {
-    public interface IUserInterface : IGenericRepository<User>
+    public interface IUserRepository : IGenericRepository<User>
     {
-        IEnumerable<User> GetTopUsers(int count);
+        void BorrowBooks(int id, IEnumerable<Book> entities);
+        void ReturnBooks(int id, IEnumerable<Book> entities);
+
     }
 }
