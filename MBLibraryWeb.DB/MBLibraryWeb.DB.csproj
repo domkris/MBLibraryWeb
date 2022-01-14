@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MBLibraryWeb.Domain\MBLibraryWeb.Domain.csproj" />
+    <ProjectReference Include="..\MBLibraryWeb.UI\MBLibraryWeb.UI.csproj" />
   </ItemGroup>
 
 </Project>

@@ -17,10 +17,10 @@ namespace MBLibraryWeb.Domain.Models
 
         [Required]
         public DateTime DOB { get; set; }
-        
-        public List<Address> Addresses { get; set; }
-        public List<Email> Emails { get; set; }
-        public List<PhoneNumber> PhoneNumbers { get; set; }
-        public List<UserBookBorrowHistory> UserBookBorrowHistoryList { get; set; }
+
+        public List<Address> Addresses { get; set; } = new();
+        public List<Email> Emails { get; set; } = new();
+        public List<PhoneNumber> PhoneNumbers { get; set; } = new();
+        public List<UserBookBorrowHistory> UserBookBorrowHistoryList { get; set; } = new();
     }
 }

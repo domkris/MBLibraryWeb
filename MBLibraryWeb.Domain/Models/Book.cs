@@ -14,6 +14,6 @@ namespace MBLibraryWeb.Domain.Models
         [Required]
         [MaxLength(200)]
         public string Author { get; set; }
-        public List<UserBookBorrowHistory> UserBookBorrowHistoryList { get; set; }
+        public List<UserBookBorrowHistory> UserBookBorrowHistoryList { get; set; } = new();
     }
 }

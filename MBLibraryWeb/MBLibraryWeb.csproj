@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MBLibraryWeb.DB\MBLibraryWeb.DB.csproj" />
+    <ProjectReference Include="..\MBLibraryWeb.Utility\MBLibraryWeb.Utility.csproj" />
   </ItemGroup>
 
 </Project>

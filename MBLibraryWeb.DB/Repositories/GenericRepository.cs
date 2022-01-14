@@ -1,4 +1,7 @@
 ﻿using MBLibraryWeb.Domain.Interfaces;
+using MBLibraryWeb.Domain.Models.Base;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,17 +30,18 @@ namespace MBLibraryWeb.DB.Repositories
 
         public IEnumerable<T> Find(Expression<Func<T, bool>> expression)
         {
-            return context.Set<T>().Where(expression);
+            return context.Set<T>().AsNoTracking().Where(expression);
         }
 
         public IEnumerable<T> GetAll()
         {
-            return context.Set<T>().ToList();
+            var result = context.Set<T>().AsNoTracking().ToList();
+            return result;
         }
 
-        public IEnumerable<T> GetAllSimpleList(Expression<Func<T, T>> expression)
+        public IEnumerable<T> GetAllUsingExpression(Expression<Func<T, T>> expression)
         {
-            return context.Set<T>().Select(expression).ToList();
+            return context.Set<T>().AsNoTracking().Select(expression).ToList();
         }
 
         public T GetById(int id)
@@ -53,6 +57,12 @@ namespace MBLibraryWeb.DB.Repositories
         public void RemoveRange(IEnumerable<T> entities)
         {
             context.Set<T>().RemoveRange(entities);
+        }
+
+        public void Update(T entity, params Expression<Func<T, object>>[] navigations)
+        {
+            
+            context.Entry(entity).State = EntityState.Modified;
         }
     }
 }

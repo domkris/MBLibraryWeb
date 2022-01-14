@@ -1,4 +1,5 @@
 ﻿using MBLibraryWeb.Domain.Models;
+using MBLibraryWeb.UI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace MBLibraryWeb.Domain.Interfaces
 {
     public interface IBookRepository : IGenericRepository<Book>
     {
-        UserBookBorrowHistory GetBookRentHistory(int id);
-
+        List<UserBookBorrowHistoryUI> GetBookRentHistory(int id);
+        List<BookUI> GetSimpleList();
     }
 }

@@ -8,8 +8,7 @@ namespace MBLibraryWeb.DB.DataAccess
     {
         public static void AddRepositoryServices(this IServiceCollection services)
         {
-            services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUnitOfWork, UnitOfWork.UnitOfWork>();
         }
     }
 }
