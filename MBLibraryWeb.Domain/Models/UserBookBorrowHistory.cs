@@ -31,9 +31,16 @@ namespace MBLibraryWeb.Domain.Models
                 }
                 else 
                 {
-                    if (DueAt.CompareTo(DateTime.Now) < 0) 
+                    // this is a possible solution for production
+                    //if (DueAt.CompareTo(DateTime.Now) < 0) 
+                    //{
+                    //    TimeSpan ts = (TimeSpan)(ReturnedAt - DateTime.Now);
+                    //    return ts.TotalDays;
+                    //}
+
+                    if (DueAt.CompareTo(BorrowedAt) < 0)
                     {
-                        TimeSpan ts = (TimeSpan)(ReturnedAt - DateTime.Now);
+                        TimeSpan ts = (TimeSpan)(ReturnedAt - BorrowedAt);
                         return ts.TotalDays;
                     }
                 }

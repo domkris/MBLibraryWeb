@@ -36,6 +36,7 @@ namespace MBLibraryWeb
 
             // Framework services
             services.AddDataAccessServices(Configuration.GetConnectionString("DefaultConnection"));
+            services.AddRepositoryServices();
 
         }
 
