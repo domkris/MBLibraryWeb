@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace MBLibraryWeb.Domain.Interfaces
 {
-    public interface IBookRepository : IGenericRepository<Book>
+    public interface IBookRepository : IGenericRepository<BookUIDetails>
     {
         List<UserBookBorrowHistoryUI> GetBookRentHistory(int id);
-        List<BookUI> GetSimpleList();
     }
 }

@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace MBLibraryWeb.Domain.Interfaces
 {
-    public interface IUserRepository : IGenericRepository<User>
+    public interface IUserRepository : IGenericRepository<UserUIDetails>
     {
         void BorrowBooks(int id, IEnumerable<BookUI> entities);
-        void ReturnBooks(int id, IEnumerable<BookUI> entities);
-        List<UserBookBorrowHistoryUI> GetUserRentHistory(int id);
+        void ReturnBook(int id);
+        List<UserBookBorrowHistory> GetUserRentHistory(int id);
         List<UserUI> GetTopUsersByOverDueTime(int numberOfUsers);
-        List<UserUI> GetSimpleList();
+        User GetUserDetails(int id);
 
     }
 }

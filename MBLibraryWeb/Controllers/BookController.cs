@@ -24,7 +24,7 @@ namespace MBLibraryWeb.Controllers
         {
             try
             {
-                var itemsUI = unitOfWork.Books.GetSimpleList();
+                var itemsUI = unitOfWork.Books.GetAll();
                 if (itemsUI.Any())
                 {
                     return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(itemsUI, null));

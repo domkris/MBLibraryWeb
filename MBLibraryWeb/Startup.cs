@@ -37,6 +37,7 @@ namespace MBLibraryWeb
             // Framework services
             services.AddDataAccessServices(Configuration.GetConnectionString("DefaultConnection"));
             services.AddRepositoryServices();
+            services.AddCors();
 
         }
 
@@ -53,6 +54,8 @@ namespace MBLibraryWeb
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(options => options.WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString()).AllowAnyHeader().AllowAnyMethod());
 
             app.UseAuthorization();
 

@@ -26,7 +26,7 @@ namespace MBLibraryWeb.Domain.Models
                     if (DueAt.CompareTo(ReturnedAt) < 0)
                     {
                         TimeSpan ts = (TimeSpan)(ReturnedAt - DueAt);
-                        return ts.TotalDays;
+                        return Math.Floor(ts.TotalDays);
                     }
                 }
                 else 
@@ -34,7 +34,7 @@ namespace MBLibraryWeb.Domain.Models
                     if (DueAt.CompareTo(DateTime.Now) < 0)
                     {
                         TimeSpan ts = DateTime.UtcNow.ToUniversalTime() - DueAt;
-                        return ts.TotalDays;
+                        return Math.Floor(ts.TotalDays);
                     }
                 }
                 return 0;

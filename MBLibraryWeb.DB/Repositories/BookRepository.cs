@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MBLibraryWeb.DB.Repositories
 {
-    public class BookRepository : GenericRepository<Book>, IBookRepository
+    public class BookRepository : GenericRepository<Book, BookUIDetails>, IBookRepository
     {
         public BookRepository(MBLibraryDbContext context) : base(context)
         {
@@ -36,7 +36,7 @@ namespace MBLibraryWeb.DB.Repositories
                 bookRentHistoryUIList.Add(new UserBookBorrowHistoryUI
                 {
                     Id = item.Id,
-                    User = new UserUI { FirstName = item.User.FirstName, LastName = item.User.LastName, DOB = item.User.DOB},
+                    User = new UserUI { FirstName = item.User.FirstName, LastName = item.User.LastName, DateOfBirth = item.User.DateOfBirth },
                     BorrowedAt = item.BorrowedAt,
                     DueAt = item.DueAt,
                     ReturnedAt = item.ReturnedAt,
@@ -47,22 +47,29 @@ namespace MBLibraryWeb.DB.Repositories
 
             return bookRentHistoryUIList;
         }
-
-        public List<BookUI> GetSimpleList()
+      
+        protected override Book ToDbModel(BookUIDetails modelUI)
         {
-            List<BookUI> booksUI = new();
-            var booksDb = context.Books.AsNoTracking().Select(_ => new Book
-            {
-                Id = _.Id,
-                Author = _.Author,
-                Title = _.Title,
-                Genre = _.Genre
+           
+            throw new NotImplementedException();
+        }
 
-            }).ToList();
+        protected override IEnumerable<Book> ToDbModelList(IEnumerable<BookUIDetails> modelUIList)
+        {
+            throw new NotImplementedException();
+        }
 
-            foreach (var item in booksDb)
+        protected override BookUIDetails ToUIModel(Book modelDb)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IEnumerable<BookUIDetails> ToUIModelList(IEnumerable<Book> modelDbList)
+        {
+            List<BookUIDetails> booksUI = new();
+            foreach (var item in modelDbList)
             {
-                booksUI.Add(new BookUI
+                booksUI.Add(new BookUIDetails
                 {
                     Id = item.Id,
                     Author = item.Author,

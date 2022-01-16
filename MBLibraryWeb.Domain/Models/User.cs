@@ -16,7 +16,7 @@ namespace MBLibraryWeb.Domain.Models
         public string LastName { get; set; }
 
         [Required]
-        public DateTime DOB { get; set; }
+        public DateTime DateOfBirth { get; set; }
 
         public List<Address> Addresses { get; set; } = new();
         public List<Email> Emails { get; set; } = new();

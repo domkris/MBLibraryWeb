@@ -20,12 +20,12 @@ namespace MBLibraryWeb.Controllers
             this.unitOfWork = unitOfWork;
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("[action]/{id}")]
         public IActionResult GetById(int id)
         {
             try
             {
-                var user = unitOfWork.Users.GetById(id);
+                var user = unitOfWork.Users.GetUserDetails(id);
                 if (user == null)
                 {
                     return StatusCode(StatusCodes.Status404NotFound, ResponseOb.GetCustomError(ErrorResponseMessage.NoDataInDatabaseWithId));
@@ -47,7 +47,7 @@ namespace MBLibraryWeb.Controllers
         {
             try
             {
-                var itemsUI = unitOfWork.Users.GetSimpleList();
+                var itemsUI = unitOfWork.Users.GetAll();
                 if (itemsUI.Any())
                 {
                     return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(itemsUI, null));
@@ -65,7 +65,7 @@ namespace MBLibraryWeb.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult Post(User user)
+        public IActionResult Post(UserUIDetails user)
         {
             try
             {
@@ -105,12 +105,12 @@ namespace MBLibraryWeb.Controllers
             }
         }
 
-        [HttpPost("[action]")]
-        public IActionResult ReturnBooks(int id, IEnumerable<BookUI> entities)
+        [HttpGet("[action]/{id}")]
+        public IActionResult ReturnBook(int id)
         {
             try
             {
-                unitOfWork.Users.ReturnBooks(id, entities);
+                unitOfWork.Users.ReturnBook(id);
                 unitOfWork.Save();
                 return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(id, null));
 
@@ -121,7 +121,7 @@ namespace MBLibraryWeb.Controllers
             }
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("[action]/{id}")]
         public IActionResult GetBookRentHistory(int id)
         {
             try
@@ -177,7 +177,7 @@ namespace MBLibraryWeb.Controllers
                 }
                 else 
                 {
-                    unitOfWork.Users.Remove(user);
+                    unitOfWork.Users.Remove(user.Id);
                     unitOfWork.Save();
                 }
                 return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(id, null));

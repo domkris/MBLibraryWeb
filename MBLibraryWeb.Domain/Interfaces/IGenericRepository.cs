@@ -5,16 +5,16 @@ using System.Linq.Expressions;
 
 namespace MBLibraryWeb.Domain.Interfaces
 {
-    public interface IGenericRepository<T> where T : class
+    public interface IGenericRepository<TModelUI> where TModelUI : class
     {
-        T GetById(int id);
-        IEnumerable<T> GetAll();
-        IEnumerable<T> GetAllUsingExpression(Expression<Func<T, T>> expression);
-        IEnumerable<T> Find(Expression<Func<T, bool>> expression);
-        void Add(T entity);
-        void AddRange(IEnumerable<T> entities);
-        void Update(T entity, params Expression<Func<T, object>>[] navigations);
-        void Remove(T entity);
-        void RemoveRange(IEnumerable<T> entities);
+        TModelUI GetById(int id);
+        IEnumerable<TModelUI> GetAll();
+        //IEnumerable<TModelUI> GetAllUsingExpression(Expression<Func<TModelUI, TModelUI>> expression);
+        //IEnumerable<TModelUI> Find(Expression<Func<TModelUI, bool>> expression);
+        void Add(TModelUI entity);
+        void AddRange(IEnumerable<TModelUI> entities);
+        void Update(TModelUI entity);
+        void Remove(int id);
+        void RemoveRange(IEnumerable<TModelUI> entities);
     }
 }
