@@ -41,19 +41,40 @@ namespace MBLibraryWeb.Controllers
             }
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("[action]/{id}")]
+        public IActionResult GetById(int id)
+        {
+            try
+            {
+                var user = unitOfWork.Books.GetById(id);
+                if (user == null)
+                {
+                    return StatusCode(StatusCodes.Status404NotFound, ResponseOb.GetCustomError(ErrorResponseMessage.NoDataInDatabaseWithId));
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(user, null));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ResponseOb.GetError(ex));
+            }
+        }
+        [HttpGet("[action]/{id}")]
         public IActionResult GetBookRentHistory(int id)
         {
             try
             {
-                var itemsUI = unitOfWork.Books.GetBookRentHistory(id);
-                if (itemsUI.Any())
+                var items = unitOfWork.Books.GetBookRentHistory(id);
+                if (items.Any())
                 {
-                    return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(itemsUI, null));
+                    return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(items, null));
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(itemsUI, ErrorResponseMessage.NoDataInDatabase));
+                    return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(items, ErrorResponseMessage.NoDataInDatabase));
                 }
 
             }

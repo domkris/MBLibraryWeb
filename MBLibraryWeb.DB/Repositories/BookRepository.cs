@@ -31,6 +31,7 @@ namespace MBLibraryWeb.DB.Repositories
                     DueAt = _.DueAt,
                     ReturnedAt = _.ReturnedAt
                 })
+                .OrderBy(_ => _.ReturnedAt)
                 .ToList();
             return bookRentHistoryDbList;
         }   

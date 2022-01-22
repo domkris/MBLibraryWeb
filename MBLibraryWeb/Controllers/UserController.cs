@@ -79,10 +79,29 @@ namespace MBLibraryWeb.Controllers
                     item.LastName = user.LastName;
                     item.DateOfBirth = user.DateOfBirth;
 
+                    List<int> addressesToRemoveFromDbIds = item.Addresses.Select(_ => _.Id).Except(user.Addresses.Select(_ => _.Id)).ToList();
+                    List<int> phoneNumbersToRemoveFromDbIds = item.PhoneNumbers.Select(_ => _.Id).Except(user.PhoneNumbers.Select(_ => _.Id)).ToList();
+                    List<int> emailsToRemoveFromDbIds = item.Emails.Select(_ => _.Id).Except(user.Emails.Select(_ => _.Id)).ToList();
+
+                    var addressesToRemoveFromDb = item.Addresses
+                               .Where(address => addressesToRemoveFromDbIds.Contains(address.Id));
+                    var phoneNumbersToRemoveFromDb = item.PhoneNumbers
+                               .Where(phoneNumber => phoneNumbersToRemoveFromDbIds.Contains(phoneNumber.Id));
+                    var emailsToRemoveFromDb = item.Emails
+                               .Where(email => emailsToRemoveFromDbIds.Contains(email.Id));
+
                     item.Addresses = user.Addresses;
                     item.Emails = user.Emails;
                     item.PhoneNumbers = user.PhoneNumbers;
 
+                    if (addressesToRemoveFromDb.Count() > 0)
+                        unitOfWork.Addresses.RemoveRange(addressesToRemoveFromDb);
+
+                    if (phoneNumbersToRemoveFromDb.Count() > 0)
+                        unitOfWork.PhoneNumbers.RemoveRange(phoneNumbersToRemoveFromDb);
+
+                    if (emailsToRemoveFromDb.Count() > 0)
+                        unitOfWork.Emails.RemoveRange(emailsToRemoveFromDb);
 
                     unitOfWork.Users.Update(item);
 
