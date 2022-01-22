@@ -18,7 +18,7 @@ namespace MBLibraryWeb.DB.UnitOfWork
             Books = new BookRepository(context);
             Emails = new EmailRepository(context);
             Addresses = new AddressRepository(context);
-            PhoneNumbers = new EmailRepository(context);
+            PhoneNumbers = new PhoneNumberRepository(context);
 
 
         }
