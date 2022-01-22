@@ -1,13 +1,13 @@
-﻿using MBLibraryWeb.Domain.Interfaces;
-using MBLibraryWeb.Domain.Models;
-using MBLibraryWeb.UI.Models;
+﻿using MBLibraryWeb.Domain.Entities;
+using MBLibraryWeb.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 namespace MBLibraryWeb.DB.Repositories
 {
-    public class UserRepository: GenericRepository<User, UserUIDetails>, IUserRepository
+    public class UserRepository: GenericRepository<User>, IUserRepository
     {
         public UserRepository(MBLibraryDbContext context): base(context)
         {
@@ -37,7 +37,12 @@ namespace MBLibraryWeb.DB.Repositories
             return bookRentHistoryDbList;
         }
 
-        public void BorrowBooks(int userId, IEnumerable<BookUI> entities)
+        public void AddToUserRentHistory(IEnumerable<UserBookBorrowHistory> userBookBorrowHistoryList) 
+        {
+            context.UsersBooksBorrowHistory.AddRange(userBookBorrowHistoryList);
+        }
+
+        public void BorrowBooks(int userId, IEnumerable<Book> entities)
         {
             List<UserBookBorrowHistory> newBookBorrowHistoryList = new();
             foreach (var book in entities)
@@ -52,7 +57,7 @@ namespace MBLibraryWeb.DB.Repositories
             }
             context.UsersBooksBorrowHistory.AddRange(newBookBorrowHistoryList);
         }
-
+        
         public void ReturnBook(int userBookBorrowHistoryItemId)
         {
             UserBookBorrowHistory userBookBorrowHistoryItem = context.UsersBooksBorrowHistory.Where(_ => _.Id == userBookBorrowHistoryItemId).FirstOrDefault();
@@ -61,10 +66,8 @@ namespace MBLibraryWeb.DB.Repositories
 
         }
 
-        public List<UserUI> GetTopUsersByOverDueTime(int numberOfUsers) 
+        public List<User> GetTopUsersByOverDueTime(int numberOfUsers) 
         {
-            List<UserUI> usersUI = new();
-            
             var booksBorrowHistoryNotReturned = context.UsersBooksBorrowHistory.AsNoTracking()
                 .Where(_ => (_.ReturnedAt != null && _.DueAt < _.ReturnedAt) || (_.ReturnedAt == null && _.DueAt < DateTime.UtcNow))
                 .Include(_ => _.User)
@@ -74,54 +77,16 @@ namespace MBLibraryWeb.DB.Repositories
                 .GroupBy(_ => _.UserId);
 
             var usersOverDue = usersOverDueGrouped
-                .Select(_ => new UserUI
+                .Select(_ => new User
                 {
                     Id = _.Key,
                     FirstName = _.Select(_ => _.User.FirstName).FirstOrDefault(),
                     LastName = _.Select(_ => _.User.LastName).FirstOrDefault(),
                     DateOfBirth = _.Select(_ => _.User.DateOfBirth).FirstOrDefault(),
-                    OverDueInDays = (int)Math.Floor(_.Sum(_ => _.GetOverdueTimeInDays))
+                    OverDueInDays = (int)Math.Floor(_.Sum(_ => _.OverdueTimeInDays))
                 }).ToList();
 
             return usersOverDue;
-        }
-
-        protected override User ToDbModel(UserUIDetails modelUI)
-        {
-
-            throw new NotImplementedException();
-        }
-
-        protected override UserUIDetails ToUIModel(User modelDb)
-        {
-            UserUIDetails user = new();
-            user.Id = modelDb.Id;
-            user.FirstName = modelDb.FirstName;
-            user.LastName = modelDb.LastName;
-            user.DateOfBirth = modelDb.DateOfBirth;
-            return user;
-        }
-
-        protected override IEnumerable<User> ToDbModelList(IEnumerable<UserUIDetails> modelUIList)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override IEnumerable<UserUIDetails> ToUIModelList(IEnumerable<User> modelDbList)
-        {
-            List<UserUIDetails> usersUI = new();
-          
-            foreach (var item in modelDbList)
-            {
-                usersUI.Add(new UserUIDetails
-                {
-                    Id = item.Id,
-                    FirstName = item.FirstName,
-                    LastName = item.LastName,
-                    DateOfBirth = item.DateOfBirth
-                });
-            }
-            return usersUI;
         }
 
         public User GetUserDetails(int id)
@@ -153,6 +118,7 @@ namespace MBLibraryWeb.DB.Repositories
                     {
                         Id = _.Id,
                         Country = _.Country,
+                        City = _.City,
                         Street = _.Street,
                         PostalCode = _.PostalCode,
                         UserId = _.UserId

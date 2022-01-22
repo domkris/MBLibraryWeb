@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MBLibraryWeb.Domain.Interfaces
 {
@@ -10,6 +6,9 @@ namespace MBLibraryWeb.Domain.Interfaces
     {
         IUserRepository Users { get; }
         IBookRepository Books { get; }
+        IEmailRepository Emails { get; }
+        IAddressRepository Addresses { get; }
+        IPhoneNumberRepository PhoneNumbers { get; }
         int Save();
     }
 }

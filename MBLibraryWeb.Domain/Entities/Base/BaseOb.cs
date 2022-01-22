@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace MBLibraryWeb.Domain.Models.Base
+namespace MBLibraryWeb.Domain.Entities.Base
 {
-    public class BaseOb
+    public abstract class BaseOb
     {
         public int Id { get; set; }       
         public DateTime? CreatedAt { get; set; }     

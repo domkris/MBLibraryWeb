@@ -1,15 +1,10 @@
-﻿using MBLibraryWeb.Domain.Models;
-using MBLibraryWeb.UI.Models;
-using System;
+﻿using MBLibraryWeb.Domain.Entities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MBLibraryWeb.Domain.Interfaces
 {
-    public interface IBookRepository : IGenericRepository<BookUIDetails>
+    public interface IBookRepository : IGenericRepository<Book>
     {
-        List<UserBookBorrowHistoryUI> GetBookRentHistory(int id);
+        List<UserBookBorrowHistory> GetBookRentHistory(int id);
     }
 }

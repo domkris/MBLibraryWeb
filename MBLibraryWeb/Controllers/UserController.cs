@@ -1,6 +1,5 @@
-﻿using MBLibraryWeb.Domain.Interfaces;
-using MBLibraryWeb.Domain.Models;
-using MBLibraryWeb.UI.Models;
+﻿using MBLibraryWeb.Domain.Entities;
+using MBLibraryWeb.Domain.Interfaces;
 using MBLibraryWeb.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -65,22 +64,31 @@ namespace MBLibraryWeb.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult Post(UserUIDetails user)
+        public IActionResult Post(User user)
         {
             try
             {
                 if (user.Id < 1)
                 {
-                    unitOfWork.Users.Add(user);
-                  
+                    unitOfWork.Users.Add(user);     
                 }
                 else 
                 {
-                    unitOfWork.Users.Update(user);
+                    var item = unitOfWork.Users.GetUserDetails(user.Id);
+                    item.FirstName = user.FirstName;
+                    item.LastName = user.LastName;
+                    item.DateOfBirth = user.DateOfBirth;
+
+                    item.Addresses = user.Addresses;
+                    item.Emails = user.Emails;
+                    item.PhoneNumbers = user.PhoneNumbers;
+
+
+                    unitOfWork.Users.Update(item);
 
                 }
                 unitOfWork.Save();
-                return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(user, null));
+                return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(user.Id, null));
 
             }
             catch (Exception ex)
@@ -90,13 +98,30 @@ namespace MBLibraryWeb.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult BorrowBooks(int id, IEnumerable<BookUI> entities)
+        public IActionResult BorrowBooks(int id, IEnumerable<Book> entities)
         {
             try
             {
                 unitOfWork.Users.BorrowBooks(id, entities);
                 unitOfWork.Save();
                 return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(id, null));
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ResponseOb.GetError(ex));
+            }
+        }
+
+        [HttpPost("[action]")]
+
+        public IActionResult AddToUserRentHistory(IEnumerable<UserBookBorrowHistory> entities)
+        {
+            try
+            {
+                unitOfWork.Users.AddToUserRentHistory(entities);
+                unitOfWork.Save();
+                return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(entities, null));
 
             }
             catch (Exception ex)
@@ -122,7 +147,7 @@ namespace MBLibraryWeb.Controllers
         }
 
         [HttpGet("[action]/{id}")]
-        public IActionResult GetBookRentHistory(int id)
+        public IActionResult GetUserRentHistory(int id)
         {
             try
             {

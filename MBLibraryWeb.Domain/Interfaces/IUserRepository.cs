@@ -1,19 +1,15 @@
-﻿using MBLibraryWeb.Domain.Models;
-using MBLibraryWeb.UI.Models;
-using System;
+﻿using MBLibraryWeb.Domain.Entities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MBLibraryWeb.Domain.Interfaces
 {
-    public interface IUserRepository : IGenericRepository<UserUIDetails>
+    public interface IUserRepository : IGenericRepository<User>
     {
-        void BorrowBooks(int id, IEnumerable<BookUI> entities);
+        void BorrowBooks(int id, IEnumerable<Book> entities);
+        void AddToUserRentHistory(IEnumerable<UserBookBorrowHistory> entitie);
         void ReturnBook(int id);
         List<UserBookBorrowHistory> GetUserRentHistory(int id);
-        List<UserUI> GetTopUsersByOverDueTime(int numberOfUsers);
+        List<User> GetTopUsersByOverDueTime(int numberOfUsers);
         User GetUserDetails(int id);
 
     }

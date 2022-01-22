@@ -1,20 +1,23 @@
-﻿using MBLibraryWeb.Domain.Models.Base;
+﻿using MBLibraryWeb.Domain.Entities.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace MBLibraryWeb.Domain.Interfaces
 {
-    public interface IGenericRepository<TModelUI> where TModelUI : class
+    public interface IGenericRepository<TEntity> where TEntity : BaseOb
     {
-        TModelUI GetById(int id);
-        IEnumerable<TModelUI> GetAll();
-        //IEnumerable<TModelUI> GetAllUsingExpression(Expression<Func<TModelUI, TModelUI>> expression);
-        //IEnumerable<TModelUI> Find(Expression<Func<TModelUI, bool>> expression);
-        void Add(TModelUI entity);
-        void AddRange(IEnumerable<TModelUI> entities);
-        void Update(TModelUI entity);
+        TEntity GetById(int id);
+        IEnumerable<TEntity> GetAll();
+        IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
+
+        void Add(TEntity entity);
+        void AddRange(IEnumerable<TEntity> entities);
+
+        void Update(TEntity entity);
+
         void Remove(int id);
-        void RemoveRange(IEnumerable<TModelUI> entities);
+        void RemoveRange(IEnumerable<TEntity> entities);
     }
+
 }

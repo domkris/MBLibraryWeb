@@ -1,75 +1,61 @@
-﻿using MBLibraryWeb.Domain.Interfaces;
-using MBLibraryWeb.Domain.Models.Base;
+﻿using MBLibraryWeb.Domain.Entities.Base;
+using MBLibraryWeb.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MBLibraryWeb.DB.Repositories
 {
-    public abstract class GenericRepository<TModelDb, TModelUI> : IGenericRepository<TModelUI> 
-        where TModelDb : class
-        where TModelUI : class
+    public abstract class GenericRepository<TEntity> : IGenericRepository<TEntity> 
+        where TEntity : BaseOb
     {
         protected readonly MBLibraryDbContext context;
         public GenericRepository(MBLibraryDbContext context)
         {
             this.context = context;
         }
-        public virtual void Add(TModelUI entityUI)
+        public virtual void Add(TEntity entity)
         {
-            context.Set<TModelDb>().Add(ToDbModel(entityUI));
+            context.Set<TEntity>().Add(entity);
         }
 
-        public virtual void AddRange(IEnumerable<TModelUI> entitiesUI)
+        public virtual void AddRange(IEnumerable<TEntity> entities)
         {
-            context.Set<TModelDb>().AddRange(ToDbModelList(entitiesUI));
+            context.Set<TEntity>().AddRange(entities);
         }
 
-        public virtual IEnumerable<TModelUI> GetAll()
+        public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
         {
-            var result = context.Set<TModelDb>().AsNoTracking().ToList();
-            return ToUIModelList(result);
+            return context.Set<TEntity>().Where(predicate);
         }
 
-        public virtual TModelUI GetById(int id)
+        public virtual IEnumerable<TEntity> GetAll()
         {
-            TModelDb entityDb = context.Set<TModelDb>().Find(id);
-            return ToUIModel(entityDb);
+            return context.Set<TEntity>().AsNoTracking().ToList();
+        }
+
+        public virtual TEntity GetById(int id)
+        {
+            return context.Set<TEntity>().Find(id);
         }
 
         public virtual void Remove(int id)
         {
-            TModelDb entityDb = context.Set<TModelDb>().Find(id);
-            context.Set<TModelDb>().Remove(entityDb);
+            TEntity entity = context.Set<TEntity>().Find(id);
+            context.Set<TEntity>().Remove(entity);
         }
 
-        public virtual void RemoveRange(IEnumerable<TModelUI> entitiesUI)
+        public virtual void RemoveRange(IEnumerable<TEntity> entities)
         {
-            IEnumerable<TModelDb> entitiesDb = ToDbModelList(entitiesUI);
-            context.Set<TModelDb>().RemoveRange(entitiesDb);
+            context.Set<TEntity>().RemoveRange(entities);
         }
 
-        public virtual void Update(TModelUI entityUI)
+        public virtual void Update(TEntity entity)
         {
-            TModelDb entityDb = ToDbModel(entityUI);
-            EntityEntry dbEntityEntry = context.Entry<TModelDb>(entityDb);
-            if (dbEntityEntry.State == EntityState.Detached)
-            {
-                context.Set<TModelDb>().Attach(entityDb);
-
-                dbEntityEntry.State = EntityState.Modified;
-            }
+            context.Set<TEntity>().Update(entity);
         }
-
-        protected abstract TModelDb ToDbModel(TModelUI modelUI);
-        protected abstract TModelUI ToUIModel(TModelDb modelDb);
-        protected abstract IEnumerable<TModelDb> ToDbModelList(IEnumerable<TModelUI> modelUI);
-        protected abstract IEnumerable<TModelUI> ToUIModelList(IEnumerable<TModelDb> modelDb);
     }
 }

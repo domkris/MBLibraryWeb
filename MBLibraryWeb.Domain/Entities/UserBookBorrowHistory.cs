@@ -1,9 +1,9 @@
-﻿using MBLibraryWeb.Domain.Models.Base;
+﻿using MBLibraryWeb.Domain.Entities.Base;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MBLibraryWeb.Domain.Models
+namespace MBLibraryWeb.Domain.Entities
 {
     public class UserBookBorrowHistory : BaseOb
     {
@@ -17,7 +17,7 @@ namespace MBLibraryWeb.Domain.Models
         public DateTime? ReturnedAt { get; set; }
 
         [NotMapped]
-        public double GetOverdueTimeInDays
+        public double OverdueTimeInDays
         {
             get
             {

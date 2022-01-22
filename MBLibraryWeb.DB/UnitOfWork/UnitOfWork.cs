@@ -16,12 +16,20 @@ namespace MBLibraryWeb.DB.UnitOfWork
             this.context = context;
             Users = new UserRepository(context);
             Books = new BookRepository(context);
+            Emails = new EmailRepository(context);
+            Addresses = new AddressRepository(context);
+            PhoneNumbers = new EmailRepository(context);
+
 
         }
 
         public IUserRepository Users { get; private set; }
 
         public IBookRepository Books { get; private set; }
+        public IEmailRepository Emails { get; private set; }
+        public IAddressRepository Addresses { get; private set; }
+        public IPhoneNumberRepository PhoneNumbers { get; private set; }
+
 
         public int Save()
         {
