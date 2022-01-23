@@ -5,11 +5,10 @@ namespace MBLibraryWeb.Domain.Interfaces
 {
     public interface IUserRepository : IGenericRepository<User>
     {
-        void BorrowBooks(int id, IEnumerable<Book> entities);
         void AddToUserRentHistory(IEnumerable<UserBookBorrowHistory> entitie);
-        void ReturnBook(int id);
+        void EditUserRentHistory(int id);
         List<UserBookBorrowHistory> GetUserRentHistory(int id);
-        List<User> GetTopUsersByOverDueTime(int numberOfUsers);
+        List<User> GetUsersByOverDueTime();
         User GetUserDetails(int id);
 
     }

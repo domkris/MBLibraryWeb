@@ -41,24 +41,8 @@ namespace MBLibraryWeb.DB.Repositories
         {
             context.UsersBooksBorrowHistory.AddRange(userBookBorrowHistoryList);
         }
-
-        public void BorrowBooks(int userId, IEnumerable<Book> entities)
-        {
-            List<UserBookBorrowHistory> newBookBorrowHistoryList = new();
-            foreach (var book in entities)
-            {
-                newBookBorrowHistoryList.Add( new UserBookBorrowHistory 
-                {
-                    UserId = userId,
-                    BookId = book.Id,
-                    BorrowedAt = DateTime.UtcNow,
-                    DueAt = DateTime.UtcNow.AddDays(30)
-                });
-            }
-            context.UsersBooksBorrowHistory.AddRange(newBookBorrowHistoryList);
-        }
-        
-        public void ReturnBook(int userBookBorrowHistoryItemId)
+       
+        public void EditUserRentHistory(int userBookBorrowHistoryItemId)
         {
             UserBookBorrowHistory userBookBorrowHistoryItem = context.UsersBooksBorrowHistory.Where(_ => _.Id == userBookBorrowHistoryItemId).FirstOrDefault();
             userBookBorrowHistoryItem.ReturnedAt = DateTime.UtcNow;
@@ -66,27 +50,31 @@ namespace MBLibraryWeb.DB.Repositories
 
         }
 
-        public List<User> GetTopUsersByOverDueTime(int numberOfUsers) 
+        public List<User> GetUsersByOverDueTime() 
         {
-            var booksBorrowHistoryNotReturned = context.UsersBooksBorrowHistory.AsNoTracking()
-                .Where(_ => (_.ReturnedAt != null && _.DueAt < _.ReturnedAt) || (_.ReturnedAt == null && _.DueAt < DateTime.UtcNow))
-                .Include(_ => _.User)
-                .ToList();
-
-            var usersOverDueGrouped = booksBorrowHistoryNotReturned
-                .GroupBy(_ => _.UserId);
-
-            var usersOverDue = usersOverDueGrouped
-                .Select(_ => new User
+            var users = context.Users
+                .AsNoTracking()
+                .Include(_ => _.UserBookBorrowHistoryList.Where(_ => (_.ReturnedAt != null && _.DueAt < _.ReturnedAt) || (_.ReturnedAt == null && _.DueAt < DateTime.UtcNow)))
+                .Select(_ => new User 
                 {
-                    Id = _.Key,
-                    FirstName = _.Select(_ => _.User.FirstName).FirstOrDefault(),
-                    LastName = _.Select(_ => _.User.LastName).FirstOrDefault(),
-                    DateOfBirth = _.Select(_ => _.User.DateOfBirth).FirstOrDefault(),
-                    OverDueInDays = (int)Math.Floor(_.Sum(_ => _.OverdueTimeInDays))
-                }).ToList();
-
-            return usersOverDue;
+                    Id = _.Id,
+                    FirstName = _.FirstName,
+                    LastName = _.LastName,
+                    DateOfBirth = _.DateOfBirth,
+                    UserBookBorrowHistoryList = _.UserBookBorrowHistoryList
+                }).ToList()
+                .Select(_ => new User 
+                {
+                    Id = _.Id,
+                    FirstName = _.FirstName,
+                    LastName = _.LastName,
+                    DateOfBirth = _.DateOfBirth,
+                    OverDueInDays = (int)Math.Floor(_.UserBookBorrowHistoryList.Sum(_ => _.OverdueTimeInDays))
+                })
+                .OrderByDescending(_ => _.OverDueInDays)
+                .ToList();
+          
+            return users;
         }
 
         public User GetUserDetails(int id)

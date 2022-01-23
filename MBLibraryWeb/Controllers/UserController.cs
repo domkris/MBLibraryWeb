@@ -46,7 +46,8 @@ namespace MBLibraryWeb.Controllers
         {
             try
             {
-                var itemsUI = unitOfWork.Users.GetAll();
+                var itemsUI = unitOfWork.Users.GetUsersByOverDueTime();
+                itemsUI.OrderBy(_ => _.OverDueInDays);
                 if (itemsUI.Any())
                 {
                     return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(itemsUI, null));
@@ -116,28 +117,16 @@ namespace MBLibraryWeb.Controllers
             }
         }
 
+  
         [HttpPost("[action]")]
-        public IActionResult BorrowBooks(int id, IEnumerable<Book> entities)
+        public IActionResult BorrowBooks(IEnumerable<UserBookBorrowHistory> entities)
         {
             try
             {
-                unitOfWork.Users.BorrowBooks(id, entities);
-                unitOfWork.Save();
-                return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(id, null));
-
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ResponseOb.GetError(ex));
-            }
-        }
-
-        [HttpPost("[action]")]
-
-        public IActionResult AddToUserRentHistory(IEnumerable<UserBookBorrowHistory> entities)
-        {
-            try
-            {
+                foreach (var item in entities)
+                {
+                    item.BorrowedAt = DateTime.UtcNow;
+                }
                 unitOfWork.Users.AddToUserRentHistory(entities);
                 unitOfWork.Save();
                 return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(entities, null));
@@ -154,7 +143,7 @@ namespace MBLibraryWeb.Controllers
         {
             try
             {
-                unitOfWork.Users.ReturnBook(id);
+                unitOfWork.Users.EditUserRentHistory(id);
                 unitOfWork.Save();
                 return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(id, null));
 
@@ -171,28 +160,6 @@ namespace MBLibraryWeb.Controllers
             try
             {
                 var itemsUI = unitOfWork.Users.GetUserRentHistory(id);
-                if (itemsUI.Any())
-                {
-                    return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(itemsUI, null));
-                }
-                else
-                {
-                    return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(itemsUI, ErrorResponseMessage.NoDataInDatabase));
-                }
-
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ResponseOb.GetError(ex));
-            }
-        }
-
-        [HttpGet("[action]")]
-        public IActionResult GetTopUsersByOverDueTime(int numberOfUsers)
-        {
-            try
-            {
-                var itemsUI = unitOfWork.Users.GetTopUsersByOverDueTime(numberOfUsers);
                 if (itemsUI.Any())
                 {
                     return StatusCode(StatusCodes.Status200OK, ResponseOb.GetSuccess(itemsUI, null));

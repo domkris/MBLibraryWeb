@@ -34,9 +34,12 @@ namespace MBLibraryWeb
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MBLibraryWeb", Version = "v1" });
             });
 
-            // Framework services
+            // Set SQL Server and Connextion string for Data Access
             services.AddDataAccessServices(Configuration.GetConnectionString("DefaultConnection"));
+
+            // Set Unit of Work with Repositories
             services.AddRepositoryServices();
+
             services.AddCors();
 
         }
